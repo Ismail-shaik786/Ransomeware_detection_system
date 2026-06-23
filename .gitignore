@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs (keep structure, ignore content)
+logs/*.log
+logs/*.json
+
+# Reports (keep structure, ignore generated reports)
+reports/*.json
+reports/*.txt
+reports/*.html
+
+# Backups (keep structure, ignore actual backup files)
+backups/*
+!backups/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+.env.local
+
+# Test artifacts
+data/watchfolder/*
+!data/watchfolder/.gitkeep
