@@ -9,9 +9,19 @@ Shannon entropy measures the randomness of data.
 
 Ransomware encrypts victims' files, so high entropy after a modification
 is a strong indicator of possible encryption activity.
+
+False-positive note
+-------------------
+Many legitimate file formats are inherently high-entropy (ZIP archives,
+JPEG/PNG images, MP4 video, Office Open XML documents such as .docx).  Scoring
+entropy on these types will always produce a high score regardless of whether
+the data was written by ransomware or a benign program.  The
+``analyse_file_entropy`` function therefore checks the file extension against
+``config.ENTROPY_SKIP_EXTENSIONS`` and returns ``None`` (skip) for those types.
 """
 
 import math
+import os
 from typing import Optional
 
 import config
@@ -58,14 +68,24 @@ def analyse_file_entropy(file_path: str) -> Optional[float]:
     """
     Read a file and return its Shannon entropy score.
 
+    Files whose extension appears in ``config.ENTROPY_SKIP_EXTENSIONS`` are
+    skipped (returns ``None``) to prevent false positives from inherently
+    high-entropy formats such as ZIP archives, images, and video files.
+
     Parameters
     ----------
     file_path : Absolute path to the file.
 
     Returns
     -------
-    float  – entropy score, or None if the file cannot be read.
+    float  – entropy score, or None if the file should be skipped / cannot
+              be read.
     """
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext in config.ENTROPY_SKIP_EXTENSIONS:
+        # This format is inherently high-entropy; skip to avoid false positives.
+        return None
+
     data = safe_file_read(file_path, config.MAX_FILE_SIZE_FOR_ENTROPY)
     if data is None:
         return None

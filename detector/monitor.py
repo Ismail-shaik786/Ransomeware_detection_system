@@ -102,14 +102,21 @@ class RansomwareEventHandler(FileSystemEventHandler):
             if event_type in ("MODIFIED", "CREATED") and os.path.isfile(path):
                 result = analyse_file_entropy(path)
                 if result is not None:
+                    # Only update persistent entropy for scorable file types.
+                    # Skipped extensions (ZIP, images, video …) return None;
+                    # we deliberately do NOT carry their score forward to avoid
+                    # false-positive bleed into the next unrelated event.
                     entropy_score = result
                     self._last_entropy = result
 
-            # Run risk engine
+            # Run risk engine using only the current event's entropy.
+            # The old code multiplied _last_entropy * 0.5 here, which caused
+            # high entropy from a ZIP write to pollute the risk score of
+            # subsequent plain-text events.  That decay is now removed.
             stats: BehaviorStats = self.behavior_analyzer.analyse()
             report: RiskReport = self.risk_engine.evaluate(
                 stats,
-                entropy_score=max(entropy_score, self._last_entropy * 0.5),
+                entropy_score=entropy_score,
                 suspicious_process=self._suspicious_process,
             )
 

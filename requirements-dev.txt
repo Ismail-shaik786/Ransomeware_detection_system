@@ -1,0 +1,5 @@
+# Development extras — not needed to run CryptLock, only for contributors
+black>=24.0.0        # code formatter
+ruff>=0.4.0          # fast linter
+pytest>=8.0.0        # test runner
+pytest-cov>=5.0.0    # coverage reporting
