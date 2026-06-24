@@ -1,13 +1,6 @@
 # 🛡️ CryptLock
-### Real-Time Terminal Ransomware Detection &amp; Response System
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://python.org)
-[![CI](https://github.com/Ismail-shaik786/Ransomeware_detection_system/actions/workflows/ci.yml/badge.svg)](https://github.com/Ismail-shaik786/Ransomeware_detection_system/actions)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-
+### Real-Time Terminal Ransomware Detection & Response System
 > **For educational and defensive security use only.**
-> See the [ethical use clause](LICENSE) in the licence.
 
 ---
 
@@ -215,13 +208,13 @@ Edit `config.py` to tune the system:
 |---|---|---|
 | `ENTROPY_HIGH_THRESHOLD` | `7.2` | Entropy above this → HIGH (encrypted) |
 | `RISK_SCORE_NORMAL` | `40` | Score ≤ 40 → NORMAL |
-| `RISK_SCORE_SUSPICIOUS` | `70` | Score 41-70 → SUSPICIOUS |
+| `RISK_SCORE_SUSPICIOUS` | `70` | Score 41–70 → SUSPICIOUS |
+| `BURST_WINDOW_SECONDS` | `30` | Sliding window size in seconds |
 | `MASS_RENAME_THRESHOLD` | `12` | Renames in 30 s window to flag mass-rename |
 | `HEAVY_MOD_THRESHOLD` | `25` | Modifications in 30 s window to flag heavy-mod |
 | `RAPID_DELETE_THRESHOLD` | `10` | Deletions in 30 s window to flag rapid-delete |
-| `BURST_WINDOW_SECONDS` | `30` | Sliding window size in seconds |
 | `SUSPICIOUS_CPU_THRESHOLD` | `90.0` | CPU % above which a process is flagged |
-| `MIN_BEHAVIOUR_FLAGS_FOR_RANSOMWARE` | `2` | Min distinct behavioural flags needed to reach RANSOMWARE |
+| `MIN_BEHAVIOUR_FLAGS_FOR_RANSOMWARE` | `2` | Min distinct behavioural flags to reach RANSOMWARE |
 | `ENTROPY_SKIP_EXTENSIONS` | `.zip .mp4 .jpg .docx …` | Extensions skipped during entropy scoring (35 types) |
 | `SUSPICIOUS_EXTENSIONS` | `.locked .encrypted …` | Ransomware extension list |
 | `APPROVED_SIMULATION_PROCESSES` | `simulate_ransomware.py …` | Safe-to-terminate list |
@@ -337,8 +330,6 @@ Expected Ransomware Guard output:
 
 ---
 
----
-
 ## Interview Q&A
 
 **Q1: What is Shannon entropy and why is it useful for ransomware detection?**
@@ -348,7 +339,7 @@ Expected Ransomware Guard output:
 > A sliding window discards events older than N seconds. This focuses analysis on *recent* activity rather than lifetime totals, which prevents false positives from legitimate gradual file changes and keeps detection sensitive to bursts.
 
 **Q3: How does the risk scoring engine work?**
-> Each behavioural indicator contributes a weighted number of points (e.g. mass rename = +30, high entropy = +20). Points are summed and capped at 100. Thresholds divide scores into NORMAL (0-40), SUSPICIOUS (41-70), and RANSOMWARE (71-100) bands, triggering escalating responses.
+> Each behavioural indicator contributes a weighted number of points (e.g. mass rename = +30, high entropy = +25). Points are summed and capped at 100. Thresholds divide scores into NORMAL (0-40), SUSPICIOUS (41-70), and RANSOMWARE (71-100) bands, triggering escalating responses.
 
 **Q4: Why is process termination limited to approved simulation processes?**
 > Targeting arbitrary processes would make this tool dangerous and potentially disruptive to users and systems. By white-listing only known test/simulation script names, we ensure the containment functionality cannot be weaponised or cause collateral damage. This is also ethically and legally essential.
@@ -361,30 +352,3 @@ Expected Ransomware Guard output:
 
 **Q7: What improvements would you make for a production-grade system?**
 > (1) Machine learning classifier on entropy + behaviour vectors. (2) Network traffic analysis for C2 communication detection. (3) Shadow copy / VSS integration on Windows. (4) Kernel-level driver hooks for deeper visibility. (5) SIEM integration (Splunk/ELK). (6) Alert deduplication and suppression rules. (7) Role-based access for the recovery/containment commands.
-
----
-
-## Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
-branching strategy, code style, commit message format, and the PR checklist.
-
-For security vulnerabilities, follow the private disclosure process described
-in [SECURITY.md](SECURITY.md).
-
-All contributors must abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
-
----
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for a full history of changes.
-
----
-
-## Licence
-
-Released under the **MIT Licence** with an additional ethical use clause —
-see [LICENSE](LICENSE) for full terms.
-
-Copyright © 2026 **ismail-shaik**
